@@ -1,5 +1,5 @@
 [[bin]]
-name = 'contracts-chain'
+name = 'node-template'
 path = 'src/main.rs'
 
 [build-dependencies]
