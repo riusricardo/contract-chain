@@ -1,24 +1,3 @@
-[[bin]]
-name = 'node-template'
-path = 'src/main.rs'
-
-[build-dependencies]
-vergen = '3.0.4'
-
-[build-dependencies.build-script-utils]
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-build-script-utils'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
-
-[package]
-authors = ['Anonymous']
-build = 'build.rs'
-edition = '2018'
-name = 'node-template'
-version = '2.0.0'
-[profile.release]
-panic = 'unwind'
-
 [dependencies]
 derive_more = '0.15.0'
 exit-future = '0.1.4'
@@ -31,17 +10,17 @@ trie-root = '0.15.2'
 [dependencies.aura]
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-consensus-aura'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.aura-primitives]
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-consensus-aura-primitives'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.basic-authorship]
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-basic-authorship'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.codec]
 package = 'parity-scale-codec'
@@ -54,27 +33,27 @@ version = '3.1.3'
 [dependencies.grandpa]
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-finality-grandpa'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.grandpa-primitives]
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-finality-grandpa-primitives'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.inherents]
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-inherents'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.network]
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-network'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.primitives]
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-primitives'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.runtime]
 package = 'node-template-runtime'
@@ -82,32 +61,53 @@ path = 'runtime'
 
 [dependencies.sr-io]
 git = 'https://github.com/paritytech/substrate.git'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.sr-primitives]
 git = 'https://github.com/paritytech/substrate.git'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.substrate-cli]
 git = 'https://github.com/paritytech/substrate.git'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.substrate-client]
 git = 'https://github.com/paritytech/substrate.git'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.substrate-executor]
 git = 'https://github.com/paritytech/substrate.git'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.substrate-service]
 git = 'https://github.com/paritytech/substrate.git'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [dependencies.transaction-pool]
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-transaction-pool'
-rev = 'c0b1941100532d30092f1ebec268e61cf4073d07'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
+
+[package]
+authors = ['Anonymous']
+build = 'build.rs'
+edition = '2018'
+name = 'node-template'
+version = '2.0.0'
+
+[build-dependencies]
+vergen = '3.0.4'
+
+[build-dependencies.build-script-utils]
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-build-script-utils'
+rev = '990acfe4d67c70b44005350a2e2122e810809849'
 
 [workspace]
 members = ['runtime']
+
+[[bin]]
+name = 'node-template'
+path = 'src/main.rs'
+[profile.release]
+panic = 'unwind'
