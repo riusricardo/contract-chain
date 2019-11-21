@@ -1,6 +1,6 @@
 use primitives::{Pair, Public, sr25519};
 use runtime::{
-	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
+	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, ContractsConfig,
 	SudoConfig, IndicesConfig, SystemConfig, WASM_BINARY, Signature
 };
 use aura_primitives::sr25519::{AuthorityId as AuraId};
@@ -118,7 +118,16 @@ fn testnet_genesis(initial_authorities: Vec<(AuraId, GrandpaId)>,
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,
 	_enable_println: bool) -> GenesisConfig {
+
+    let mut contracts_config = ContractsConfig {
+        current_schedule: Default::default(),
+        gas_price: 1 * 1_000_000_000, // MILLICENTS
+    };
+    // IMPORTANT: this should only be enabled on development chains!
+    contracts_config.current_schedule.enable_println = true;
+
 	GenesisConfig {
+        
 		system: Some(SystemConfig {
 			code: WASM_BINARY.to_vec(),
 			changes_trie_config: Default::default(),
@@ -138,6 +147,7 @@ fn testnet_genesis(initial_authorities: Vec<(AuraId, GrandpaId)>,
 		}),
 		grandpa: Some(GrandpaConfig {
 			authorities: initial_authorities.iter().map(|x| (x.1.clone(), 1)).collect(),
-		}),
+        }),
+        contracts: Some(contracts_config),
 	}
 }
