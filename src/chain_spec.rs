@@ -1,6 +1,6 @@
 use primitives::{Pair, Public, sr25519};
 use runtime::{
-	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, ContractsConfig,
+	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, ContractsConfig, Balance,
 	SudoConfig, IndicesConfig, SystemConfig, WASM_BINARY, Signature
 };
 use aura_primitives::sr25519::{AuthorityId as AuraId};
@@ -10,6 +10,9 @@ use sr_primitives::traits::{Verify, IdentifyAccount};
 
 // Note this is the URL for the telemetry server
 //const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
+
+// Contracts price units.
+pub const MILLICENTS: Balance = 1_000_000_000;
 
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.
 pub type ChainSpec = substrate_service::ChainSpec<GenesisConfig>;
@@ -121,7 +124,7 @@ fn testnet_genesis(initial_authorities: Vec<(AuraId, GrandpaId)>,
 
     let mut contracts_config = ContractsConfig {
         current_schedule: Default::default(),
-        gas_price: 1 * 1_000_000_000, // MILLICENTS
+        gas_price: 1 * MILLICENTS,
     };
     // IMPORTANT: this should only be enabled on development chains!
     contracts_config.current_schedule.enable_println = true;
