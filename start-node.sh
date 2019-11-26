@@ -6,5 +6,5 @@
   --ws-port 9944 \
   --rpc-port 9933 \
   --telemetry-url ws://telemetry.polkadot.io:1024 \
-  --validator
+  --pruning archive \
   --name MyNode
