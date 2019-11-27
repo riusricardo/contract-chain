@@ -1,8 +1,175 @@
+[dependencies.aura]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-aura'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.aura-primitives]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-consensus-aura-primitives'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.balances]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-balances'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.block-builder-api]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-block-builder-runtime-api'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.codec]
+default-features = false
+features = ['derive']
+package = 'parity-scale-codec'
+version = '1.0.0'
+
+[dependencies.contracts]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-contracts'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.contracts-rpc-runtime-api]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-contracts-rpc-runtime-api'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.executive]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'frame-executive'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.grandpa]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-grandpa'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.indices]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-indices'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.inherents]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-inherents'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.offchain-primitives]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-offchain-primitives'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.primitives]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-primitives'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.randomness-collective-flip]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-randomness-collective-flip'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.rstd]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-std'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.runtime-io]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-io'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.safe-mix]
+default-features = false
+version = '1.0.0'
+
+[dependencies.serde]
+features = ['derive']
+optional = true
+version = '1.0.101'
+
+[dependencies.sr-api]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.sr-primitives]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.substrate-session]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.sudo]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-sudo'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.support]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'frame-support'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.system]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'frame-system'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.timestamp]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-timestamp'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.transaction-payment]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-transaction-payment'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.tx-pool-api]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-transaction-pool-runtime-api'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
+[dependencies.version]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-version'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+
 [package]
 authors = ['Anonymous']
 edition = '2018'
 name = 'node-template-runtime'
 version = '2.0.0'
+[build-dependencies.wasm-builder-runner]
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-wasm-builder-runner'
+rev = 'b3a7c8e463ff7a63ce20e1eb14d8ccc63de4a412'
+version = '1.0.4'
 
 [features]
 default = ['std']
@@ -12,6 +179,7 @@ std = [
     'balances/std',
     'block-builder-api/std',
     'codec/std',
+    'contracts-rpc-runtime-api/std',
     'contracts/std',
     'executive/std',
     'grandpa/std',
@@ -35,165 +203,3 @@ std = [
     'tx-pool-api/std',
     'version/std',
 ]
-
-[build-dependencies.wasm-builder-runner]
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-wasm-builder-runner'
-rev = '59b8b10b77a03baca1f4e477a12f563998e402f7'
-version = '1.0.4'
-
-[dependencies.aura]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-aura'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.aura-primitives]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-consensus-aura-primitives'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.balances]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-balances'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.block-builder-api]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-block-builder-runtime-api'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.codec]
-default-features = false
-features = ['derive']
-package = 'parity-scale-codec'
-version = '1.0.0'
-
-[dependencies.contracts]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-contracts'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.executive]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'palette-executive'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.grandpa]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-grandpa'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.indices]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-indices'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.inherents]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-inherents'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.offchain-primitives]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-offchain-primitives'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.primitives]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-primitives'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.randomness-collective-flip]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-randomness-collective-flip'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.rstd]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sr-std'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.runtime-io]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sr-io'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.safe-mix]
-default-features = false
-version = '1.0.0'
-
-[dependencies.serde]
-features = ['derive']
-optional = true
-version = '1.0.101'
-
-[dependencies.sr-api]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.sr-primitives]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.substrate-session]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.sudo]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-sudo'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.support]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'palette-support'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.system]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'palette-system'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.timestamp]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-timestamp'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.transaction-payment]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-transaction-payment'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.tx-pool-api]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-transaction-pool-runtime-api'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
-
-[dependencies.version]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sr-version'
-rev = '990acfe4d67c70b44005350a2e2122e810809849'
