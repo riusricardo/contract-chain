@@ -5,7 +5,7 @@ use support::{traits::{Currency, ExistenceRequirement},
 	weights::SimpleDispatchInfo
 };
 use sr_primitives::{
-	traits::{CheckedSub, CheckedMul}
+	traits::{CheckedSub}
 };
 
 /// The module's configuration trait.
@@ -16,7 +16,7 @@ pub trait Trait: system::Trait + balances::Trait {
 
 // This module's storage items.
 decl_storage! {
-	trait Store for Module<T: Trait> as FaucetModule {
+	trait Store for Module<T: Trait> as Faucet {
 		Faucets get(faucets): map T::AccountId => Option<T::Balance>;
 	}
 }
@@ -38,12 +38,10 @@ decl_module! {
 		/// This is only for testing environments AND SHOULD NEVER BE DEPLOYED ANYWHERE.
 		#[weight = SimpleDispatchInfo::FreeOperational]
 		pub fn faucet(origin, source: T::AccountId) -> Result {
-			let target = ensure_signed(origin)?;
+            let target = ensure_signed(origin)?;
+            
+            let value = T::Balance::from(1000);
 
-			let value = match <Balances<T> as Currency<T::AccountId>>::minimum_balance().checked_mul(&T::Balance::from(100)){
-				None => return Err("Could not calc faucet"),
-				Some(b) => b,
-			};
 			let source_limit = match Self::faucets(&source) {
 				None => return Err("Source doesn't have an open faucet"),
 				Some(b) => b,
@@ -53,7 +51,7 @@ decl_module! {
 				Some(b) => b,
 			};
 
-			let _ = <Balances<T> as Currency<T::AccountId>>::transfer(&source, &target, value, ExistenceRequirement::KeepAlive)?;
+            let _ = <Balances<T> as Currency<T::AccountId>>::transfer(&source, &target, value, ExistenceRequirement::KeepAlive)?;
 			Faucets::<T>::insert(&source, new_limit);
 			Ok(())
 		}
@@ -113,7 +111,7 @@ mod tests {
 	impl Trait for Test {
 		type Event = ();
 	}
-	type FaucetModule = Module<Test>;
+	type Faucet = Module<Test>;
 
 	// This function basically just builds a genesis storage key/value store according to
 	// our desired mockup.
@@ -126,9 +124,9 @@ mod tests {
 		new_test_ext().execute_with(|| {
 			// Just a dummy test for the dummy funtion `do_something`
 			// calling the `do_something` function with a value 42
-			assert_ok!(FaucetModule::do_something(Origin::signed(1), 42));
+			assert_ok!(Faucet::do_something(Origin::signed(1), 42));
 			// asserting that the stored value is equal to what we stored
-			assert_eq!(FaucetModule::something(), Some(42));
+			assert_eq!(Faucet::something(), Some(42));
 		});
 	}
 }

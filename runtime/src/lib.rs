@@ -196,7 +196,7 @@ impl timestamp::Trait for Runtime {
 }
 
 parameter_types! {
-	pub const ExistentialDeposit: u128 = 500;
+	pub const ExistentialDeposit: u128 = 0;
 	pub const TransferFee: u128 = 0;
 	pub const CreationFee: u128 = 0;
 }
@@ -219,7 +219,7 @@ impl balances::Trait for Runtime {
 
 parameter_types! {
 	pub const TransactionBaseFee: Balance = 0;
-	pub const TransactionByteFee: Balance = 0;
+	pub const TransactionByteFee: Balance = 1;
 }
 
 impl transaction_payment::Trait for Runtime {
@@ -297,7 +297,7 @@ construct_runtime!(
 		TransactionPayment: transaction_payment::{Module, Storage},
 		Sudo: sudo,
 		// Used for the module faucet in `./faucet.rs`
-		FaucetModule: faucet::{Module, Call, Storage, Event<T>},
+		Faucet: faucet::{Module, Call, Storage, Event<T>},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Contracts: contracts,
 	}
