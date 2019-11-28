@@ -10,7 +10,6 @@ use sr_primitives::{
 
 /// The module's configuration trait.
 pub trait Trait: system::Trait + balances::Trait {
-	/// The overarching event type.
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
 
@@ -38,10 +37,9 @@ decl_module! {
 		/// This is only for testing environments AND SHOULD NEVER BE DEPLOYED ANYWHERE.
 		#[weight = SimpleDispatchInfo::FreeOperational]
 		pub fn faucet(origin, source: T::AccountId) -> Result {
-            let target = ensure_signed(origin)?;
-            
-            let value = T::Balance::from(1000);
+			let target = ensure_signed(origin)?;
 
+			let value = T::Balance::from(1_000_000_000);
 			let source_limit = match Self::faucets(&source) {
 				None => return Err("Source doesn't have an open faucet"),
 				Some(b) => b,
@@ -51,7 +49,7 @@ decl_module! {
 				Some(b) => b,
 			};
 
-            let _ = <Balances<T> as Currency<T::AccountId>>::transfer(&source, &target, value, ExistenceRequirement::KeepAlive)?;
+			let _ = <Balances<T> as Currency<T::AccountId>>::transfer(&source, &target, value, ExistenceRequirement::KeepAlive)?;
 			Faucets::<T>::insert(&source, new_limit);
 			Ok(())
 		}
