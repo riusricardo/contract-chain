@@ -1,5 +1,3 @@
-//! The Substrate Node Template runtime. This can be compiled with `#[no_std]`, ready for Wasm.
-
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit="256"]
@@ -65,8 +63,8 @@ pub type Hash = primitives::H256;
 /// Digest item type.
 pub type DigestItem = generic::DigestItem<Hash>;
 
-/// Used for the module template in `./template.rs`
-mod template;
+/// Used for the module faucet in `./faucet.rs`
+mod faucet;
 
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
@@ -221,7 +219,7 @@ impl balances::Trait for Runtime {
 
 parameter_types! {
 	pub const TransactionBaseFee: Balance = 0;
-	pub const TransactionByteFee: Balance = 1;
+	pub const TransactionByteFee: Balance = 0;
 }
 
 impl transaction_payment::Trait for Runtime {
@@ -279,8 +277,8 @@ impl contracts::Trait for Runtime {
 	type BlockGasLimit = contracts::DefaultBlockGasLimit;
 }
 
-/// Used for the module template in `./template.rs`
-impl template::Trait for Runtime {
+/// Used for the module faucet in `./faucet.rs`
+impl faucet::Trait for Runtime {
 	type Event = Event;
 }
 
@@ -298,10 +296,10 @@ construct_runtime!(
 		Balances: balances::{default, Error},
 		TransactionPayment: transaction_payment::{Module, Storage},
 		Sudo: sudo,
-		// Used for the module template in `./template.rs`
-		TemplateModule: template::{Module, Call, Storage, Event<T>},
-        RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
-        Contracts: contracts,
+		// Used for the module faucet in `./faucet.rs`
+		FaucetModule: faucet::{Module, Call, Storage, Event<T>},
+		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
+		Contracts: contracts,
 	}
 );
 
@@ -377,7 +375,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl tx_pool_api::TaggedTransactionQueue<Block> for Runtime {
+	impl txpool_runtime_api::TaggedTransactionQueue<Block> for Runtime {
 		fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
 			Executive::validate_transaction(tx)
 		}
