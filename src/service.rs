@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 use std::time::Duration;
-use substrate_client::LongestChain;
+use substrate_client::*;
 use runtime::{self, GenesisConfig, opaque::Block, RuntimeApi};
 use substrate_service::{error::{Error as ServiceError}, AbstractService, Configuration, ServiceBuilder};
 use inherents::InherentDataProviders;
@@ -31,6 +31,7 @@ construct_simple_protocol! {
 /// be able to perform chain operations.
 macro_rules! new_full_start {
 	($config:expr) => {{
+        type RpcExtension = jsonrpc_core::IoHandler<substrate_rpc::Metadata>;
 		let mut import_setup = None;
 		let inherent_data_providers = inherents::InherentDataProviders::new();
 
@@ -56,20 +57,30 @@ macro_rules! new_full_start {
 						client.clone(), &*client, select_chain
 					)?;
 
-				let import_queue = aura::import_queue::<_, _, AuraPair, _>(
-					aura::SlotDuration::get_or_compute(&*client)?,
-					Box::new(grandpa_block_import.clone()),
-					Some(Box::new(grandpa_block_import.clone())),
-					None,
-					client,
-					inherent_data_providers.clone(),
-					Some(transaction_pool),
-				)?;
 
-				import_setup = Some((grandpa_block_import, grandpa_link));
-
-				Ok(import_queue)
-			})?;
+					let import_queue = aura::import_queue::<_, _, AuraPair, _>(
+						aura::SlotDuration::get_or_compute(&*client)?,
+						Box::new(grandpa_block_import.clone()),
+						Some(Box::new(grandpa_block_import.clone())),
+						None,
+						client,
+						inherent_data_providers.clone(),
+						Some(transaction_pool),
+					)?;
+	
+					import_setup = Some((grandpa_block_import, grandpa_link));
+	
+					Ok(import_queue)
+			})?
+			// .with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -> RpcExtension {
+			// 	use pallet_contracts_rpc::{Contracts, ContractsApi};
+			// 	let mut io = jsonrpc_core::IoHandler::default();
+			// 	io.extend_with(
+			// 		ContractsApi::to_delegate(Contracts::new(client.clone()))
+			// 	);
+			// 	io
+			// })?
+			;
 
 		(builder, import_setup, inherent_data_providers)
 	}}
