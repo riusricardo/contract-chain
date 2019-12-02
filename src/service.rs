@@ -2,13 +2,13 @@
 
 use std::sync::Arc;
 use std::time::Duration;
-use substrate_client::*;
+use sc_client::LongestChain;
 use runtime::{self, GenesisConfig, opaque::Block, RuntimeApi};
-use substrate_service::{error::{Error as ServiceError}, AbstractService, Configuration, ServiceBuilder};
+use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration, ServiceBuilder};
 use inherents::InherentDataProviders;
 use network::{construct_simple_protocol};
-use substrate_executor::native_executor_instance;
-pub use substrate_executor::NativeExecutor;
+use sc_executor::native_executor_instance;
+pub use sc_executor::NativeExecutor;
 use aura_primitives::sr25519::{AuthorityPair as AuraPair};
 use grandpa::{self, FinalityProofProvider as GrandpaFinalityProofProvider};
 use basic_authorship;
@@ -31,15 +31,15 @@ construct_simple_protocol! {
 /// be able to perform chain operations.
 macro_rules! new_full_start {
 	($config:expr) => {{
-        type RpcExtension = jsonrpc_core::IoHandler<substrate_rpc::Metadata>;
+        type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
 		let mut import_setup = None;
 		let inherent_data_providers = inherents::InherentDataProviders::new();
 
-		let builder = substrate_service::ServiceBuilder::new_full::<
+		let builder = sc_service::ServiceBuilder::new_full::<
 			runtime::opaque::Block, runtime::RuntimeApi, crate::service::Executor
 		>($config)?
 			.with_select_chain(|_config, backend| {
-				Ok(substrate_client::LongestChain::new(backend.clone()))
+				Ok(sc_client::LongestChain::new(backend.clone()))
 			})?
 			.with_transaction_pool(|config, client, _fetcher| {
 				let pool_api = txpool::FullChainApi::new(client.clone());
@@ -50,26 +50,26 @@ macro_rules! new_full_start {
 			})?
 			.with_import_queue(|_config, client, mut select_chain, transaction_pool| {
 				let select_chain = select_chain.take()
-					.ok_or_else(|| substrate_service::Error::SelectChainRequired)?;
+					.ok_or_else(|| sc_service::Error::SelectChainRequired)?;
 
 				let (grandpa_block_import, grandpa_link) =
 					grandpa::block_import::<_, _, _, runtime::RuntimeApi, _>(
 						client.clone(), &*client, select_chain
 					)?;
 
-					let import_queue = aura::import_queue::<_, _, AuraPair, _>(
-						aura::SlotDuration::get_or_compute(&*client)?,
-						Box::new(grandpa_block_import.clone()),
-						Some(Box::new(grandpa_block_import.clone())),
-						None,
-						client,
-						inherent_data_providers.clone(),
-						Some(transaction_pool),
-					)?;
-	
-					import_setup = Some((grandpa_block_import, grandpa_link));
-	
-					Ok(import_queue)
+				let import_queue = aura::import_queue::<_, _, AuraPair, _>(
+					aura::SlotDuration::get_or_compute(&*client)?,
+					Box::new(grandpa_block_import.clone()),
+					Some(Box::new(grandpa_block_import.clone())),
+					None,
+					client,
+					inherent_data_providers.clone(),
+					Some(transaction_pool),
+				)?;
+
+				import_setup = Some((grandpa_block_import, grandpa_link));
+
+				Ok(import_queue)
 			})?
 			.with_rpc_extensions(|client, _pool, _backend, _, _| -> Result<RpcExtension, _> {
 				use pallet_contracts_rpc::{Contracts, ContractsApi};
@@ -119,7 +119,10 @@ pub fn new_full<C: Send + Default + 'static>(config: Configuration<C, GenesisCon
 		let select_chain = service.select_chain()
 			.ok_or(ServiceError::SelectChainRequired)?;
 
-		let aura = aura::start_aura::<_, _, _, _, _, AuraPair, _, _, _>(
+		let can_author_with =
+			consensus_common::CanAuthorWithNativeVersion::new(client.executor().clone());
+
+		let aura = aura::start_aura::<_, _, _, _, _, AuraPair, _, _, _, _>(
 			aura::SlotDuration::get_or_compute(&*client)?,
 			client,
 			select_chain,
@@ -129,6 +132,7 @@ pub fn new_full<C: Send + Default + 'static>(config: Configuration<C, GenesisCon
 			inherent_data_providers.clone(),
 			force_authoring,
 			service.keystore(),
+			can_author_with,
 		)?;
 
 		// the AURA authoring task is considered essential, i.e. if it

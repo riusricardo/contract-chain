@@ -2,15 +2,14 @@ use support::{
 	decl_module, 
 	decl_storage, 
 	decl_event, 
-	dispatch::Result, 
-	// dispatch::Vec
+	dispatch::Result,
 };
 use system::ensure_signed;
 use balances::{self, Module as Balances};
 use support::{traits::{Currency, ExistenceRequirement},
 	weights::SimpleDispatchInfo
 };
-use sr_primitives::{
+use sp_runtime::{
 	traits::{CheckedSub}
 };
 use rstd::{convert::From, prelude::*};
@@ -81,7 +80,7 @@ mod tests {
 
 	use primitives::H256;
 	use support::{impl_outer_origin, assert_ok, parameter_types, weights::Weight};
-	use sr_primitives::{
+	use sp_runtime::{
 		traits::{BlakeTwo256, IdentityLookup}, testing::Header, Perbill,
 	};
 
@@ -120,7 +119,7 @@ mod tests {
 	impl Trait for Test {
 		type Event = ();
 	}
-	type Faucet = Module<Test>;
+	type TemplateModule = Module<Test>;
 
 	// This function basically just builds a genesis storage key/value store according to
 	// our desired mockup.
@@ -133,9 +132,9 @@ mod tests {
 		new_test_ext().execute_with(|| {
 			// Just a dummy test for the dummy funtion `do_something`
 			// calling the `do_something` function with a value 42
-			assert_ok!(Faucet::do_something(Origin::signed(1), 42));
+			assert_ok!(TemplateModule::do_something(Origin::signed(1), 42));
 			// asserting that the stored value is equal to what we stored
-			assert_eq!(Faucet::something(), Some(42));
+			assert_eq!(TemplateModule::something(), Some(42));
 		});
 	}
 }
