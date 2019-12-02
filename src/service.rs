@@ -72,15 +72,14 @@ macro_rules! new_full_start {
 	
 					Ok(import_queue)
 			})?
-			// .with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -> RpcExtension {
-			// 	use pallet_contracts_rpc::{Contracts, ContractsApi};
-			// 	let mut io = jsonrpc_core::IoHandler::default();
-			// 	io.extend_with(
-			// 		ContractsApi::to_delegate(Contracts::new(client.clone()))
-			// 	);
-			// 	io
-			// })?
-			;
+			.with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -> RpcExtension {
+				use pallet_contracts_rpc::{Contracts, ContractsApi};
+				let mut io = jsonrpc_core::IoHandler::default();
+                io.extend_with(
+                    ContractsApi::to_delegate(Contracts::new(client.clone()))
+                );
+			io
+			})?;
 
 		(builder, import_setup, inherent_data_providers)
 	}}
