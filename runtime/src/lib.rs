@@ -29,7 +29,7 @@ use version::NativeVersion;
 pub use sr_primitives::BuildStorage;
 pub use timestamp::Call as TimestampCall;
 pub use balances::Call as BalancesCall;
-pub use contracts::Gas;
+pub use contracts::Gas as ContractsGas;
 pub use sr_primitives::{Permill, Perbill};
 pub use support::{
 	StorageValue, construct_runtime, parameter_types,
@@ -205,7 +205,7 @@ impl balances::Trait for Runtime {
 	/// The type for recording an account's balance.
 	type Balance = Balance;
 	/// What to do if an account's free balance gets zeroed.
-	type OnFreeBalanceZero = ();
+	type OnFreeBalanceZero = Contracts;
 	/// What to do if a new account is created.
 	type OnNewAccount = Indices;
 	/// The ubiquitous event type.
@@ -279,14 +279,14 @@ impl contracts::Trait for Runtime {
 
 /// Used for the module faucet in `./faucet.rs`
 impl faucet::Trait for Runtime {
-	type Event = Event;
+    type Event = Event;
 }
 
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
 		NodeBlock = opaque::Block,
-		UncheckedExtrinsic = UncheckedExtrinsic
+        UncheckedExtrinsic = UncheckedExtrinsic
 	{
 		System: system::{Module, Call, Storage, Config, Event},
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
@@ -296,9 +296,8 @@ construct_runtime!(
 		Balances: balances::{default, Error},
 		TransactionPayment: transaction_payment::{Module, Storage},
 		Sudo: sudo,
-		// Used for the module faucet in `./faucet.rs`
+        RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Faucet: faucet::{Module, Call, Storage, Event<T>},
-		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Contracts: contracts,
 	}
 );

@@ -57,7 +57,6 @@ macro_rules! new_full_start {
 						client.clone(), &*client, select_chain
 					)?;
 
-
 					let import_queue = aura::import_queue::<_, _, AuraPair, _>(
 						aura::SlotDuration::get_or_compute(&*client)?,
 						Box::new(grandpa_block_import.clone()),

@@ -1,4 +1,10 @@
-use support::{decl_module, decl_storage, decl_event, dispatch::Result};
+use support::{
+	decl_module, 
+	decl_storage, 
+	decl_event, 
+	dispatch::Result, 
+	// dispatch::Vec
+};
 use system::ensure_signed;
 use balances::{self, Module as Balances};
 use support::{traits::{Currency, ExistenceRequirement},
@@ -7,6 +13,7 @@ use support::{traits::{Currency, ExistenceRequirement},
 use sr_primitives::{
 	traits::{CheckedSub}
 };
+use rstd::{convert::From, prelude::*};
 
 /// The module's configuration trait.
 pub trait Trait: system::Trait + balances::Trait {
@@ -16,6 +23,7 @@ pub trait Trait: system::Trait + balances::Trait {
 // This module's storage items.
 decl_storage! {
 	trait Store for Module<T: Trait> as Faucet {
+		Allowances get(fn allowances): Option<T::AccountId>;
 		Faucets get(faucets): map T::AccountId => Option<T::Balance>;
 	}
 }
@@ -28,24 +36,27 @@ decl_module! {
 
 		pub fn open_faucet(origin, limit: T::Balance) -> Result {
 			let who = ensure_signed(origin)?;
-
 			Faucets::<T>::insert(&who, limit);
+			Allowances::<T>::put(who);
 			Ok(())
 		}
 
 		/// Just is a super simplistic faucet, that gives any new account a minimum BALANCE.
-		/// This is only for testing environments AND SHOULD NEVER BE DEPLOYED ANYWHERE.
 		#[weight = SimpleDispatchInfo::FreeOperational]
-		pub fn faucet(origin, source: T::AccountId) -> Result {
+		pub fn ask_faucet(origin) -> Result {
 			let target = ensure_signed(origin)?;
+			let source = match Self::allowances() {
+				None => return Err("Account not allowed"),
+				Some(a) => a,
+			};
 
-			let value = T::Balance::from(1_000_000_000);
+			let value: T::Balance = T::Balance::from(u32::max_value());
 			let source_limit = match Self::faucets(&source) {
 				None => return Err("Source doesn't have an open faucet"),
 				Some(b) => b,
 			};
 			let new_limit = match source_limit.checked_sub(&value) {
-				None => return Err("would drive limit too low"),
+				None => return Err("Would drive limit too low"),
 				Some(b) => b,
 			};
 
