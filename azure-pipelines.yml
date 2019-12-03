@@ -1,8 +1,6 @@
 trigger:
   branches:
     include: ['master']
-  tags:
-    include: ['v*']
 pr:
   branches:
     include:
@@ -164,14 +162,3 @@ stages:
         title: '$(Build.SourceBranchName)'
         assetUploadMode: 'replace'
         addChangeLog: true
-
-resources:
-  repositories:
-    - repository: templates
-      type: github
-      name: crate-ci/azure-pipelines
-      endpoint: riusricardo
-    - repository: gh-install
-      type: github
-      name: crate-ci/gh-install
-      endpoint: riusricardo
