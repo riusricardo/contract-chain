@@ -1,6 +1,4 @@
-trigger:
-  branches:
-    include: ['master']
+trigger: none
 pr:
   branches:
     include:
@@ -15,6 +13,7 @@ variables:
   mac_vm: macos-10.14
   linux_vm: ubuntu-18.04
   rust_style: stable
+  tagName: v0.1
 stages:
 - stage: build
   displayName: Build
@@ -38,6 +37,7 @@ stages:
           crate_name: node-template
     pool:
       vmImage: $(imageName)
+    timeoutInMinutes: 120
     steps:
     - template: azure/install-rust.yml@templates
       parameters:
@@ -77,9 +77,9 @@ stages:
       inputs:
         gitHubConnection: 'riusricardo'
         repositoryName: 'riusricardo/contracts-chain/'
-        action: 'create'
         target: '$(Build.SourceVersion)'
-        tagSource: 'auto'
+        tag: '$(tagName)'
+        tagSource: 'manual'
         assets: '$(Build.ArtifactStagingDirectory)/$(crate_name)-$(Build.SourceBranchName)-$(TARGET).zip'
         title: '$(Build.SourceBranchName)'
 resources:
