@@ -38,6 +38,7 @@ stages:
           crate_name: node-template
     pool:
       vmImage: $(imageName)
+    timeoutInMinutes: 120
     steps:
     - template: azure/install-rust.yml@templates
       parameters:
@@ -77,9 +78,6 @@ stages:
       inputs:
         gitHubConnection: 'riusricardo'
         repositoryName: 'riusricardo/contracts-chain/'
-        action: 'create'
-        target: '$(Build.SourceVersion)'
-        tagSource: 'auto'
         assets: '$(Build.ArtifactStagingDirectory)/$(crate_name)-$(Build.SourceBranchName)-$(TARGET).zip'
         title: '$(Build.SourceBranchName)'
 resources:
