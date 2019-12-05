@@ -15,8 +15,17 @@ stages:
     displayName: Deploy
     strategy:
       matrix:
+        windows:
+          imageName: ${{ variables.windows_vm }}
+          target: 'x86_64-pc-windows-msvc'
+          channel: stable
+          crate_name: node-template
         mac:
           imageName: ${{ variables.mac_vm }}
+          channel: stable
+          crate_name: node-template
+        linux:
+          imageName: ${{ variables.linux_vm }}
           channel: stable
           crate_name: node-template
     pool:
