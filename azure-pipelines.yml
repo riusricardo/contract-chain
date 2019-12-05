@@ -72,7 +72,7 @@ stages:
         rootFolderOrFile: '$(Build.BinariesDirectory)/'
         includeRootFolder: false
         archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(crate_name)-$(Build.SourceBranchName)-$(target).zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(crate_name)-$(target).zip'
     - task: GitHubRelease@1
       inputs:
         gitHubConnection: 'riusricardo'
