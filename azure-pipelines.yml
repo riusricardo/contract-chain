@@ -27,10 +27,12 @@ stages:
           crate_name: node-template
         mac:
           imageName: ${{ variables.mac_vm }}
+          target: 'x86_64-macos'
           channel: stable
           crate_name: node-template
         linux:
           imageName: ${{ variables.linux_vm }}
+          target: 'x86_64-linux-gnu'
           channel: stable
           crate_name: node-template
     pool:
@@ -78,8 +80,8 @@ stages:
         action: 'edit'
         target: '$(Build.SourceVersion)'
         tag: 'v1.0'
-        title: '$(Build.SourceBranchName)'
-        assets: '$(Build.ArtifactStagingDirectory)/$(crate_name)-$(Build.SourceBranchName)-$(target).zip'
+        title: '$(crate_name)'
+        assets: '$(Build.ArtifactStagingDirectory)/$(crate_name)-$(target).zip'
         addChangeLog: false
 
 resources:
