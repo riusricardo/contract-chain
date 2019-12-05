@@ -1,19 +1,12 @@
-trigger: none
-pr:
-  branches:
-    include:
-    - master
-  paths:
-    exclude:
-    - "*.md"
-    - "docs/*"
-    - "LICENSE-*"
+trigger:
+- none
+
 variables:
   windows_vm: windows-2019
   mac_vm: macos-10.14
   linux_vm: ubuntu-18.04
   rust_style: stable
-  tagName: v0.1
+
 stages:
 - stage: build
   displayName: Build
@@ -22,17 +15,8 @@ stages:
     displayName: Deploy
     strategy:
       matrix:
-        windows:
-          imageName: ${{ variables.windows_vm }}
-          target: 'x86_64-pc-windows-msvc'
-          channel: stable
-          crate_name: node-template
         mac:
           imageName: ${{ variables.mac_vm }}
-          channel: stable
-          crate_name: node-template
-        linux:
-          imageName: ${{ variables.linux_vm }}
           channel: stable
           crate_name: node-template
     pool:
@@ -73,15 +57,16 @@ stages:
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(crate_name)-$(Build.SourceBranchName)-$(TARGET).zip'
-    - task: GithubRelease@0
+    - task: GitHubRelease@1
       inputs:
         gitHubConnection: 'riusricardo'
         repositoryName: 'riusricardo/contracts-chain/'
+        action: 'create'
         target: '$(Build.SourceVersion)'
-        tag: '$(tagName)'
-        tagSource: 'manual'
+        tagSource: 'gitTag'
         assets: '$(Build.ArtifactStagingDirectory)/$(crate_name)-$(Build.SourceBranchName)-$(TARGET).zip'
-        title: '$(Build.SourceBranchName)'
+        addChangeLog: false
+
 resources:
   repositories:
     - repository: templates
