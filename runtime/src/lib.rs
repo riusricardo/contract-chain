@@ -98,7 +98,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     apis: RUNTIME_API_VERSIONS,
 };
 
-pub const MILLISECS_PER_BLOCK: u64 = 6000;
+pub const MILLISECS_PER_BLOCK: u64 = 5000;
 
 pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
 
@@ -235,15 +235,15 @@ impl sudo::Trait for Runtime {
 }
 
 parameter_types! {
-    pub const ContractTransferFee: Balance = 1 * CENTS;
-    pub const ContractCreationFee: Balance = 1 * CENTS;
-    pub const ContractTransactionBaseFee: Balance = 1 * CENTS;
-    pub const ContractTransactionByteFee: Balance = 10 * MILLICENTS;
-    pub const ContractFee: Balance = 1 * CENTS;
-    pub const TombstoneDeposit: Balance = 1 * DOLLARS;
-    pub const RentByteFee: Balance = 1 * DOLLARS;
-    pub const RentDepositOffset: Balance = 1000 * DOLLARS;
-    pub const SurchargeReward: Balance = 150 * DOLLARS;
+    pub const ContractTransferFee: Balance = 0 * CENTS;
+    pub const ContractCreationFee: Balance = 0 * CENTS;
+    pub const ContractTransactionBaseFee: Balance = 0 * CENTS;
+    pub const ContractTransactionByteFee: Balance = 0 * MILLICENTS;
+    pub const ContractFee: Balance = 0 * CENTS;
+    pub const TombstoneDeposit: Balance = 0 * DOLLARS;
+    pub const RentByteFee: Balance = 0 * DOLLARS;
+    pub const RentDepositOffset: Balance = 0 * DOLLARS;
+    pub const SurchargeReward: Balance = 0 * DOLLARS;
 }
 
 impl contracts::Trait for Runtime {
