@@ -8,11 +8,10 @@ use network::construct_simple_protocol;
 use runtime::{self, opaque::Block, GenesisConfig, RuntimeApi};
 use sc_client::LongestChain;
 use sc_executor::native_executor_instance;
+pub use sc_executor::NativeExecutor;
 use sc_service::{error::Error as ServiceError, AbstractService, Configuration, ServiceBuilder};
 use std::sync::Arc;
 use std::time::Duration;
-
-pub use sc_executor::NativeExecutor;
 
 // Our native executor instance.
 native_executor_instance!(
@@ -81,6 +80,7 @@ macro_rules! new_full_start {
             io.extend_with(ContractsApi::to_delegate(Contracts::new(client.clone())));
             Ok(io)
         })?;
+
         (builder, import_setup, inherent_data_providers)
     }};
 }

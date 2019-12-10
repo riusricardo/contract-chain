@@ -1,23 +1,29 @@
-use balances::{self, Module as Balances};
-use rstd::{convert::From, prelude::*};
-use sp_runtime::traits::CheckedSub;
-use support::{decl_event, decl_module, decl_storage, dispatch::Result};
-use support::{
-    traits::{Currency, ExistenceRequirement},
-    weights::SimpleDispatchInfo,
-};
+/// A runtime module template with necessary imports
+
+/// Feel free to remove or edit this file as needed.
+/// If you change the name of this file, make sure to update its references in runtime/src/lib.rs
+/// If you remove this file, you can remove those references
+
+/// For more guidance on Substrate modules, see the example module
+/// https://github.com/paritytech/substrate/blob/master/frame/example/src/lib.rs
+use support::{decl_event, decl_module, decl_storage, dispatch};
 use system::ensure_signed;
 
 /// The module's configuration trait.
-pub trait Trait: system::Trait + balances::Trait {
+pub trait Trait: system::Trait {
+    // TODO: Add other types and constants required configure this module.
+
+    /// The overarching event type.
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
 
 // This module's storage items.
 decl_storage! {
-    trait Store for Module<T: Trait> as Faucet {
-        Allowances get(fn allowances): Option<T::AccountId>;
-        Faucets get(faucets): map T::AccountId => Option<T::Balance>;
+    trait Store for Module<T: Trait> as TemplateModule {
+        // Just a dummy storage item.
+        // Here we are declaring a StorageValue, `Something` as a Option<u32>
+        // `get(fn something)` is the default getter which returns either the stored `u32` or `None` if nothing stored
+        Something get(fn something): Option<u32>;
     }
 }
 
@@ -25,36 +31,23 @@ decl_storage! {
 decl_module! {
     /// The module declaration.
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+        // Initializing events
+        // this is needed only if you are using events in your module
         fn deposit_event() = default;
 
-        pub fn open_faucet(origin, limit: T::Balance) -> Result {
+        // Just a dummy entry point.
+        // function that can be called by the external world as an extrinsics call
+        // takes a parameter of the type `AccountId`, stores it and emits an event
+        pub fn do_something(origin, something: u32) -> dispatch::Result {
+            // TODO: You only need this if you want to check it was signed.
             let who = ensure_signed(origin)?;
-            Faucets::<T>::insert(&who, limit);
-            Allowances::<T>::put(who);
-            Ok(())
-        }
 
-        /// Just is a super simplistic faucet, that gives any new account a minimum BALANCE.
-        #[weight = SimpleDispatchInfo::FreeOperational]
-        pub fn ask_faucet(origin) -> Result {
-            let target = ensure_signed(origin)?;
-            let source = match Self::allowances() {
-                None => return Err("Account not allowed"),
-                Some(a) => a,
-            };
-            let value: T::Balance = T::Balance::from(u32::max_value());
-            let source_limit = match Self::faucets(&source) {
-                None => return Err("Source doesn't has an open faucet"),
-                Some(b) => b,
-            };
-            let new_limit = match source_limit.checked_sub(&value) {
-                None => return Err("Would drive limit too low"),
-                Some(b) => b,
-            };
+            // TODO: Code to execute when something calls this.
+            // For example: the following line stores the passed in u32 in the storage
+            Something::put(something);
 
-            let _ = <Balances<T> as Currency<T::AccountId>>::transfer(&source, &target, value, ExistenceRequirement::KeepAlive)?;
-            Faucets::<T>::insert(&source, new_limit);
-
+            // here we are raising the Something event
+            Self::deposit_event(RawEvent::SomethingStored(something, who));
             Ok(())
         }
     }
@@ -66,6 +59,8 @@ decl_event!(
         AccountId = <T as system::Trait>::AccountId,
     {
         // Just a dummy event.
+        // Event `Something` is declared with a parameter of the type `u32` and `AccountId`
+        // To emit this event, we call the deposit funtion, from our runtime funtions
         SomethingStored(u32, AccountId),
     }
 );
@@ -122,7 +117,7 @@ mod tests {
 
     // This function basically just builds a genesis storage key/value store according to
     // our desired mockup.
-    fn new_test_ext() -> runtime_io::TestExternalities {
+    fn new_test_ext() -> sp_io::TestExternalities {
         system::GenesisConfig::default()
             .build_storage::<Test>()
             .unwrap()

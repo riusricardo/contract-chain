@@ -1,3 +1,5 @@
+//! The Substrate Node Template runtime. This can be compiled with `#[no_std]`, ready for Wasm.
+
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
@@ -11,7 +13,6 @@ use contracts_rpc_runtime_api::ContractExecResult;
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
 use primitives::OpaqueMetadata;
-use rstd::prelude::*;
 use sp_api::impl_runtime_apis;
 use sp_runtime::traits::{
     BlakeTwo256, Block as BlockT, ConvertInto, IdentifyAccount, NumberFor, StaticLookup, Verify,
@@ -20,6 +21,7 @@ use sp_runtime::{
     create_runtime_str, generic, impl_opaque_keys, transaction_validity::TransactionValidity,
     ApplyExtrinsicResult, MultiSignature,
 };
+use sp_std::prelude::*;
 #[cfg(feature = "std")]
 use version::NativeVersion;
 use version::RuntimeVersion;
@@ -61,8 +63,8 @@ pub type Hash = primitives::H256;
 /// Digest item type.
 pub type DigestItem = generic::DigestItem<Hash>;
 
-/// Used for the module faucet in `./faucet.rs`
-mod faucet;
+/// Used for the module template in `./template.rs`
+mod template;
 
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
@@ -194,7 +196,7 @@ impl timestamp::Trait for Runtime {
 }
 
 parameter_types! {
-    pub const ExistentialDeposit: u128 = 0;
+    pub const ExistentialDeposit: u128 = 500;
     pub const TransferFee: u128 = 0;
     pub const CreationFee: u128 = 0;
 }
@@ -217,7 +219,7 @@ impl balances::Trait for Runtime {
 
 parameter_types! {
     pub const TransactionBaseFee: Balance = 0;
-    pub const TransactionByteFee: Balance = 0;
+    pub const TransactionByteFee: Balance = 1;
 }
 
 impl transaction_payment::Trait for Runtime {
@@ -229,21 +231,16 @@ impl transaction_payment::Trait for Runtime {
     type FeeMultiplierUpdate = ();
 }
 
-impl sudo::Trait for Runtime {
-    type Event = Event;
-    type Proposal = Call;
-}
-
 parameter_types! {
-    pub const ContractTransferFee: Balance = 0 * CENTS;
-    pub const ContractCreationFee: Balance = 0 * CENTS;
-    pub const ContractTransactionBaseFee: Balance = 0 * CENTS;
-    pub const ContractTransactionByteFee: Balance = 0 * MILLICENTS;
-    pub const ContractFee: Balance = 0 * CENTS;
-    pub const TombstoneDeposit: Balance = 0 * DOLLARS;
-    pub const RentByteFee: Balance = 0 * DOLLARS;
-    pub const RentDepositOffset: Balance = 0 * DOLLARS;
-    pub const SurchargeReward: Balance = 0 * DOLLARS;
+    pub const ContractTransferFee: Balance = 1 * CENTS;
+    pub const ContractCreationFee: Balance = 1 * CENTS;
+    pub const ContractTransactionBaseFee: Balance = 1 * CENTS;
+    pub const ContractTransactionByteFee: Balance = 10 * MILLICENTS;
+    pub const ContractFee: Balance = 1 * CENTS;
+    pub const TombstoneDeposit: Balance = 1 * DOLLARS;
+    pub const RentByteFee: Balance = 1 * DOLLARS;
+    pub const RentDepositOffset: Balance = 1000 * DOLLARS;
+    pub const SurchargeReward: Balance = 150 * DOLLARS;
 }
 
 impl contracts::Trait for Runtime {
@@ -275,8 +272,13 @@ impl contracts::Trait for Runtime {
     type BlockGasLimit = contracts::DefaultBlockGasLimit;
 }
 
-/// Used for the module faucet in `./faucet.rs`
-impl faucet::Trait for Runtime {
+impl sudo::Trait for Runtime {
+    type Event = Event;
+    type Proposal = Call;
+}
+
+/// Used for the module template in `./template.rs`
+impl template::Trait for Runtime {
     type Event = Event;
 }
 
@@ -284,7 +286,7 @@ construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
 		NodeBlock = opaque::Block,
-        UncheckedExtrinsic = UncheckedExtrinsic
+		UncheckedExtrinsic = UncheckedExtrinsic
 	{
 		System: system::{Module, Call, Storage, Config, Event},
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
@@ -294,9 +296,10 @@ construct_runtime!(
 		Balances: balances::{default, Error},
 		TransactionPayment: transaction_payment::{Module, Storage},
 		Sudo: sudo,
+		// Used for the module template in `./template.rs`
+		TemplateModule: template::{Module, Call, Storage, Event<T>},
         RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
-		Faucet: faucet::{Module, Call, Storage, Event<T>},
-		Contracts: contracts,
+        Contracts: contracts,
 	}
 );
 
@@ -373,7 +376,7 @@ impl_runtime_apis! {
         }
     }
 
-    impl txpool_runtime_api::TaggedTransactionQueue<Block> for Runtime {
+    impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
         fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
             Executive::validate_transaction(tx)
         }
