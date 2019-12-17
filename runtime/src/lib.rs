@@ -8,12 +8,12 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
-use aura_primitives::sr25519::AuthorityId as AuraId;
 use contracts_rpc_runtime_api::ContractExecResult;
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
-use primitives::OpaqueMetadata;
 use sp_api::impl_runtime_apis;
+use sp_consensus_aura::sr25519::AuthorityId as AuraId;
+use sp_core::OpaqueMetadata;
 use sp_runtime::traits::{
     BlakeTwo256, Block as BlockT, ConvertInto, IdentifyAccount, NumberFor, StaticLookup, Verify,
 };
@@ -23,18 +23,18 @@ use sp_runtime::{
 };
 use sp_std::prelude::*;
 #[cfg(feature = "std")]
-use version::NativeVersion;
-use version::RuntimeVersion;
+use sp_version::NativeVersion;
+use sp_version::RuntimeVersion;
 
 // A few exports that help ease life for downstream crates.
 pub use balances::Call as BalancesCall;
 pub use contracts::Gas as ContractsGas;
+pub use frame_support::{
+    construct_runtime, parameter_types, traits::Randomness, weights::Weight, StorageValue,
+};
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
-pub use support::{
-    construct_runtime, parameter_types, traits::Randomness, weights::Weight, StorageValue,
-};
 pub use timestamp::Call as TimestampCall;
 
 /// An index to a block.
@@ -58,7 +58,7 @@ pub type Balance = u128;
 pub type Index = u32;
 
 /// A hash of some data used by the chain.
-pub type Hash = primitives::H256;
+pub type Hash = sp_core::H256;
 
 /// Digest item type.
 pub type DigestItem = generic::DigestItem<Hash>;
@@ -100,8 +100,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     apis: RUNTIME_API_VERSIONS,
 };
 
-pub const MILLISECS_PER_BLOCK: u64 = 5000;
-
+pub const MILLISECS_PER_BLOCK: u64 = 6000;
 pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
 
 // These time units are defined in number of blocks.
@@ -298,8 +297,8 @@ construct_runtime!(
 		Sudo: sudo,
 		// Used for the module template in `./template.rs`
 		TemplateModule: template::{Module, Call, Storage, Event<T>},
-        RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
-        Contracts: contracts,
+		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
+		Contracts: contracts,
 	}
 );
 
@@ -328,7 +327,7 @@ pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signatu
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
 /// Executive: handles dispatch to the various modules.
 pub type Executive =
-    executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
+    frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
     impl sp_api::Core<Block> for Runtime {
@@ -351,7 +350,7 @@ impl_runtime_apis! {
         }
     }
 
-    impl block_builder_api::BlockBuilder<Block> for Runtime {
+    impl sp_block_builder::BlockBuilder<Block> for Runtime {
         fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
             Executive::apply_extrinsic(extrinsic)
         }
@@ -360,14 +359,14 @@ impl_runtime_apis! {
             Executive::finalize_block()
         }
 
-        fn inherent_extrinsics(data: inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+        fn inherent_extrinsics(data: sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
             data.create_extrinsics()
         }
 
         fn check_inherents(
             block: Block,
-            data: inherents::InherentData,
-        ) -> inherents::CheckInherentsResult {
+            data: sp_inherents::InherentData,
+        ) -> sp_inherents::CheckInherentsResult {
             data.check_extrinsics(&block)
         }
 
@@ -382,13 +381,13 @@ impl_runtime_apis! {
         }
     }
 
-    impl offchain_primitives::OffchainWorkerApi<Block> for Runtime {
+    impl sp_offchain::OffchainWorkerApi<Block> for Runtime {
         fn offchain_worker(number: NumberFor<Block>) {
             Executive::offchain_worker(number)
         }
     }
 
-    impl aura_primitives::AuraApi<Block, AuraId> for Runtime {
+    impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
         fn slot_duration() -> u64 {
             Aura::slot_duration()
         }

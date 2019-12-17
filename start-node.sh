@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ./target/release/node-template \
-  --chain ./customSpec.json \
+  --chain local \
   --port 30333 \
   --ws-port 9944 \
   --rpc-port 9933 \

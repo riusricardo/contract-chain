@@ -1,12 +1,12 @@
-use aura_primitives::sr25519::AuthorityId as AuraId;
 use grandpa_primitives::AuthorityId as GrandpaId;
-use primitives::{sr25519, Pair, Public};
-use runtime::{
+use node_template_runtime::{
     AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, IndicesConfig, Signature,
     SudoConfig, SystemConfig, WASM_BINARY,
 };
-use runtime::{ContractsConfig, MILLICENTS};
+use node_template_runtime::{ContractsConfig, MILLICENTS};
 use sc_service;
+use sp_consensus_aura::sr25519::AuthorityId as AuraId;
+use sp_core::{sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
 // Note this is the URL for the telemetry server
@@ -123,14 +123,14 @@ fn testnet_genesis(
     initial_authorities: Vec<(AuraId, GrandpaId)>,
     root_key: AccountId,
     endowed_accounts: Vec<AccountId>,
-    enable_println: bool,
+    _enable_println: bool,
 ) -> GenesisConfig {
     let mut contracts_config = ContractsConfig {
         current_schedule: Default::default(),
         gas_price: 1 * MILLICENTS,
     };
     // IMPORTANT: println should only be enabled on development chains!
-    contracts_config.current_schedule.enable_println = enable_println;
+    contracts_config.current_schedule.enable_println = _enable_println;
     GenesisConfig {
         system: Some(SystemConfig {
             code: WASM_BINARY.to_vec(),
@@ -143,7 +143,7 @@ fn testnet_genesis(
             balances: endowed_accounts
                 .iter()
                 .cloned()
-                .map(|k| (k, 1 << 127))
+                .map(|k| (k, 1 << 60))
                 .collect(),
             vesting: vec![],
         }),
